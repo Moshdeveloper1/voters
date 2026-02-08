@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Departmental Voting Poll for Administrative Post of Polymer and Textile Technology</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f1f5f9;
+            padding: 2rem;
+        }
+
+        .card {
+            max-width: 520px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 13px;
+        }
+
+        .success {
+            color: #16a34a;
+            font-weight: 600;
+            text-align: center;
+        }
+    </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+    emailjs.init("loY7aVn6N-D6ymmTf");
+</script>
+
+<body>
+
+    <div class="card">
+
+        <!-- VERIFY -->
+        <div style="color:  #16a34a; text-align: center;" id="verifyStep">
+            <h2>Voter's Details</h2>
+            <input id="name" placeholder="Full Name" />
+            <input id="matric" placeholder="Matric Number" />
+            <input id="email" placeholder="Email Address" />
+            <button onclick="verifyVoter()">Verify</button>
+            <p id="verifyError" class="error"></p>
+        </div>
+
+        <!-- VOTE -->
+        <div id="voteStep" class="hidden">
+            <h2 style="color:  #16a34a;">Departmental Voting Poll for Administrative Post of Polymer and Textile
+                Technology</h2>
+
+            <h3>Vote for President of your department</h3>
+            <select data-category="President">
+                <option value="">Select</option>
+                <option>NICHOL DEBORAH ADEOLA</option>
+                <option>JOHNSON EMMANUEL OTEGA</option>
+                <option>ODEMAKINDE JOSEPH BOLUWATIFE</option>
+
+            </select>
+
+            <h3>Vote for Vice President 2 of your department</h3>
+            <select data-category="Vice President">
+                <option value="">Select</option>
+                <option>MUHAMMED HAWAWU</option>
+                <option>ABARIKO YETUNDE JANET</option>
+            </select>
+
+            <h3>Vote for General Secretary 1 of your department</h3>
+            <select data-category="Secretary1">
+                <option value="">Select</option>
+                <option>MICHAEL SUNDAY JOSEPH</option>
+            </select>
+            <h3>Vote for General Secretary 2 of your department</h3>
+            <select data-category="Secretary2">
+                <option value="">Select</option>
+                <option>SULAIMON DEBORAH ABIMBOLA</option>
+            </select>
+            <h3>Vote for Treasurer of your department</h3>
+            <select data-category="Treasurer">
+                <option value="">Select</option>
+                <option>OLARENWAJU FEMI JOHN
+                </option>
+
+            </select>
+
+            <h3>Vote for PRO of your department</h3>
+            <select data-category="PRO">
+                <option value="">Select</option>
+                <option>BERNARD CHIGOZIE CHRISTOPHER </option>
+            </select>
+
+            <h3>Vote for Welfare of your department</h3>
+            <select data-category="Welfare">
+                <option value="">Select</option>
+                <option>OLATUNJI AHMOD MOYOSORE</option>
+            </select>
+            <h3>Vote for Social Director 1 of your department</h3>
+            <select data-category="Social1">
+                <option value="">Select</option>
+                <option>ADENODI PELUMI JOHNSON</option>
+            </select>
+            <h3>Vote for Social Director 2 of your department</h3>
+            <select data-category="Social2">
+                <option value="">Select</option>
+                <option>OMOLAJA FATIMOH BISOLA</option>
+            </select>
+            <h3>Vote for Sport Director 1 of your department</h3>
+            <select data-category="Sports1">
+                <option value="">Select</option>
+                <option>EGBEKUN BOLUWATIFE MERCY</option>
+            </select>
+            <h3>Vote for Sport Director 2 of your department</h3>
+            <select data-category="Sports2">
+                <option value="">Select</option>
+                <option>LAZARUS DAVID OLUWAFORIJIMI</option>
+
+            </select>
+
+            <button onclick="submitVote()">Submit All Votes</button>
+            <p id="voteError" class="error"></p>
+        </div>
+
+        <!-- DONE -->
+        <div id="doneStep" class="hidden">
+            <h2 class="success">✅ Thanks for voting</h2>
+            <p style="text-align:center; font-size:14px;">
+                Await the result from coordinator.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        /* =====================
+           VOTERS (SOURCE)
+        ===================== */
+
+        let voters = [
+            // { email: "student1@example.com", voted: false },
+            // { email: "student2@example.com", voted: false },
+            // { email: "student3@example.com", voted: false }
+            { email: "Stephenoluwatobiloba7@gmail.com", voted: false },
+            { email: "oladejokadijat23@gmail.com", voted: false },
+            { email: "Ikechukwujustin.com", voted: false },
+            { email: "oluwanisola411@gmail.com", voted: false },
+            { email: "olasumboiyanuoluwa@gmail.com", voted: false },
+            { email: "opatoyemary@gmail.com", voted: false },
+            { email: "nicholdeborah5@gmail.com", voted: false },
+            { email: "alhakeemaisha01@gmail.com", voted: false },
+            { email: "Shonubimariam6@gmail.com", voted: false },
+            { email: "giftemma20000@gmail.com", voted: false },
+            { email: "deborahsulaimon3gmail.com", voted: false },
+            { email: "emokeraro@gmail.com", voted: false },
+            { email: "anisuloworacheal@gmail.com", voted: false },
+            { email: "Chinechebem123@gmail.com", voted: false },
+            { email: "ogechio102@gmail.com", voted: false },
+            { email: "Enioluwatifeh@gmail.com", voted: false },
+            { email: "claraogu9721@gmail.com", voted: false },
+            { email: "stephaniechiamaca@gmail.com", voted: false },
+            { email: "michaelsunday912@gmail.com", voted: false },
+            { email: "Olajideislamiyat16@gmail.com", voted: false },
+            { email: "moyosoreahmod@gmail.com", voted: false },
+            { email: "muhammedhawawu317@gmail.com", voted: false },
+            { email: "johnsonjeffery052@gmail.com", voted: false },
+            { email: "deborahaderonke7@gmail.com", voted: false },
+            { email: "Kemiibosiola@gmail.com", voted: false },
+            { email: "itunuolorunniyi@gmail.com", voted: false },
+            { email: "joycechukwuma79@gmail.com", voted: false },
+            { email: "busayooluwa061@gmail.com", voted: false },
+            { email: "Omotoyosiisa2@gmail.com", voted: false },
+            { email: "salaudeenkhalid1@gmail.com", voted: false },
+            { email: "kayodeamos093@gmail.com", voted: false },
+            { email: "Victoriabimpe2@gmail.com", voted: false },
+            { email: "Yekinihabibat65@gmail.com", voted: false },
+            { email: "Olalekanomolara2002@gmail.com", voted: false },
+            { email: "olayanjuayodeji7@gmail.com", voted: false },
+            { email: "pamelaime432@gmail.com", voted: false },
+            { email: "kasunmutoluwalaseigbunuoghene@gmail.com", voted: false },
+            { email: "mustaphaayomide615@gmail.com", voted: false },
+            { email: "iheanachopeace08@gmail.com", voted: false },
+            { email: "preciousokafor012@gmail.com", voted: false },
+            { email: "hoteyinjulianah23@gmail.com", voted: false },
+            { email: "chidinmaokorie123@gmail.com", voted: false },
+            { email: "muyiwaoladokun76@gmail.com", voted: false },
+            { email: "nasirutolani606@gmail.com", voted: false },
+            { email: "elizaize505@gmail.com", voted: false },
+            { email: "jimoholuwatobiloba64@gmail.com", voted: false },
+            { email: "temiladeoyebanji853@gmail.com", voted: false },
+            { email: "bonaventuree82@gmail.com", voted: false },
+            { email: "balogunlateefat015@gmail.com", voted: false },
+            { email: "owolabisofuwat@gmail.com", voted: false },
+            { email: "Oyinkansolamiadebanjo@gmail.com", voted: false },
+            { email: "ayonimofeadeola89@gmail.com", voted: false },
+            { email: "Marydamilola319@gmail.com", voted: false },
+            { email: "abarikoj@gmail.com", voted: false },
+            { email: "oreziib@gmail.com", voted: false },
+            { email: "adekeyerofiatayomide489@gmail.com", voted: false },
+            { email: "Ejerapheal8@gmail.com", voted: false },
+            { email: "babatundeayobiojo@gmail.com", voted: false },
+            { email: "onibudoajoke@gmail.com", voted: false },
+            { email: "rokibatyakub14@gmail.com", voted: false },
+            { email: "mbaatata@gmail.com", voted: false },
+            { email: "badmustomiwa59@gmail.com", voted: false },
+            { email: "tobigabriel917@gmail.com", voted: false },
+            { email: "aderibigbeolamide740@gmail.com", voted: false },
+            { email: "Ohamchidinma@gmail.com", voted: false },
+            { email: "fuwaoladunni@gmail.com", voted: false },
+            { email: "moyinoluwaadaobi65@gmail.com", voted: false },
+            { email: "animashaungbolahan74@gmail.com", voted: false },
+            { email: "alapafujahmariam@gmail.com", voted: false },
+            { email: "Moyosoretalabi6@gmail.com", voted: false },
+            { email: "Stephenoluwatobiloba7@gmail.com", voted: false },
+            { email: "omolajafatimoh27@gmail.com", voted: false },
+            { email: "emmytega@gmail.com", voted: false },
+            { email: "pelumijohnson101@gmail.com", voted: false },
+            { email: "khalidkasali22@gmail.com", voted: false },
+            { email: "damilolal640@gmail.com", voted: false },
+            { email: "ritaokeke281@gmail.com", voted: false },
+            { email: "adukekhadijah9@gmail.com", voted: false },
+            { email: "funmiadetunji44@gmail.com", voted: false },
+            { email: "oluwaforijimi444@gmail.com", voted: false },
+            { email: "oguntunjieniola280@gmail.com", voted: false },
+            { email: "arikebamigboye658@gmail.com", voted: false },
+            { email: "migoldbowo@gmail.com", voted: false },
+            { email: "edosagoodness@gmail.com", voted: false },
+            { email: "kpomegbeemmanuel298@gmail.com", voted: false },
+            { email: "Marshmicheal070@gmail.com", voted: false },
+            { email: "bakareoyinkansola65@gmail.com", voted: false },
+            { email: "omolaramonique@gmail.com", voted: false },
+            { email: "omolajaaminat07@gmail.com", voted: false },
+            { email: "oyindamolafaridah9@gmail.com", voted: false },
+            { email: "boluwatifeoshodiutme@gmail.com", voted: false },
+            { email: "teewealth135@gmail.com", voted: false },
+            { email: "ohanwadiglory@gmail.com", voted: false },
+            { email: "Oyebisiomotolani9@gmail.com", voted: false },
+            { email: "dujoxytech1029@gmail.com", voted: false },
+            { email: "odebiyiopemipo67@gmail.com", voted: false },
+            { email: "Bernardchristopher638@gmail.com", voted: false },
+            { email: "Liadiaminat944@gmail.com", voted: false },
+            { email: "afeezdavies69@gmail.com", voted: false },
+            { email: "Ikemagodwin1234@gmail.com", voted: false },
+            { email: "ogedengberuth32@gmail.com", voted: false },
+            { email: "mercyogboruuyouyo@gmail.com", voted: false },
+            { email: "Eniolaoluka@gmail.com", voted: false },
+            { email: "gbajimideborah7@gmail.com", voted: false },
+            { email: "oluwabusolaato2023@gmail.com", voted: false },
+            { email: "ayoankara8@gmail.com", voted: false },
+            { email: "lawalkanyinsola94@gmail.com", voted: false },
+            { email: "afolashadeglory15@gmail.com", voted: false },
+            { email: "isinguzooluchi355@gmail.com", voted: false },
+            { email: "Amudalatyemisi@gmail.com", voted: false },
+            { email: "ajibolaasmau7@gmail.com", voted: false },
+            { email: "memunatidris37@gmail.com", voted: false },
+            { email: "ifeoluwamary503@gmail.com", voted: false },
+            { email: "oluwatosinomosele@gmail.com", voted: false },
+            { email: "ogutugatitilayogloria@gmail.com", voted: false },
+            { email: "wakamabelema30@gmail.com", voted: false },
+            { email: "mary4beauty22@gmail.com", voted: false },
+            { email: "joyjoe027@gmail.com", voted: false },
+            { email: "Marthastacey58@gmail.com", voted: false },
+            { email: "bolarinwamunirdeen@gmail.com", voted: false },
+            { email: "Iyanuoluwanifemi959@gmail.com", voted: false },
+            { email: "tomiwamolomo3@gmail.com", voted: false },
+            { email: "maryotoghile92@gmail.com", voted: false },
+            { email: "priscachioma2002@gmail.com", voted: false },
+            { email: "estheribukunoluwapo@gmail.com", voted: false },
+            { email: "ososanayomide12@gmail.com", voted: false },
+            { email: "Oyindamolafathia2003@gmail.com", voted: false },
+            { email: "ayomidejoseph1704@gmail.com", voted: false },
+        ];
+
+        const saved = localStorage.getItem("voters");
+        if (saved) voters = JSON.parse(saved);
+
+        let currentIndex = null;
+
+        /* =====================
+           VERIFY
+        ===================== */
+
+        function verifyVoter() {
+            const name = document.getElementById("name").value.trim();
+            const matric = document.getElementById("matric").value.trim();
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            const error = document.getElementById("verifyError");
+
+            error.textContent = "";
+
+            const index = voters.findIndex(v => v.email === email);
+
+            if (!name || !matric || !email) {
+                error.textContent = "All fields are required.";
+                return;
+            }
+            if (index === -1) {
+                error.textContent = "Email not registered.";
+                return;
+            }
+            if (voters[index].voted) {
+                error.textContent = "You have already voted.";
+                return;
+            }
+
+            voters[index].name = name;
+            voters[index].matric = matric;
+            currentIndex = index;
+
+            document.getElementById("verifyStep").classList.add("hidden");
+            document.getElementById("voteStep").classList.remove("hidden");
+        }
+
+        /* =====================
+           SUBMIT
+        ===================== */
+
+        async function submitVote() {
+            const selects = document.querySelectorAll("select[data-category]");
+            const error = document.getElementById("voteError");
+            error.textContent = "";
+
+            const votes = {};
+
+            for (const select of selects) {
+                if (!select.value) {
+                    error.textContent = "Please complete all categories.";
+                    return;
+                }
+                votes[select.dataset.category] = select.value;
+            }
+
+            const voter = voters[currentIndex];
+            voter.voted = true;
+            voter.votes = votes;
+            voter.votedAt = new Date().toISOString();
+
+            localStorage.setItem("voters", JSON.stringify(voters));
+
+            // Build unordered list for email
+            let voteList = "<ul>";
+            for (const [category, choice] of Object.entries(votes)) {
+                voteList += `<li><strong>${category}</strong>: ${choice}</li>`;
+            }
+            voteList += "</ul>";
+
+            const templateParams = {
+                name: voter.name,
+                matric: voter.matric,
+                email: voter.email,
+                votes: voteList,
+                submitted_at: new Date().toLocaleString()
+            };
+
+            try {
+                await emailjs.send(
+                    "service_1kvj1wk",
+                    "template_78lrz78",
+                    templateParams
+                );
+
+                document.getElementById("voteStep").classList.add("hidden");
+                document.getElementById("thanksStep").classList.remove("hidden");
+
+            } catch (err) {
+                error.textContent = "Failed to submit vote. Please try again.";
+                console.error(err);
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
